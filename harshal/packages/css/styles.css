@@ -7,6 +7,7 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+
 }
 :root {
   --header-height: 3rem;
@@ -1263,6 +1264,26 @@ img {
   text-transform: uppercase;
   letter-spacing: 1px;
   color: #00d4ff; /* Or your brand accent */
+}
+
+@media (max-width: 768px) {
+  .footer .content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .footer-left,
+  .footer-social,
+  .footer-middle,
+  .footer-copy {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
 }
 
 @keyframes bubble-size {
