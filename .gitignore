@@ -1,63 +1,19 @@
+# === SSL / Secrets ===
 my-portfolio.pem
-# === Node Modules / Frontend build (if ever used) ===
-node_modules/
-dist/
-build/
-
-# === OS / IDE junk ===
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*.tmp
-*.bak
-.idea/
-.vscode/
-
-# === Python (if used for any script) ===
-__pycache__/
-*.pyc
 
 # === Docker ===
 .docker/
-*.log
-
 # === Ansible ===
-*.retry
-*.vault
-*.key
-
-# === Terraform ===
-.terraform/
-terraform.tfstate
-terraform.tfstate.*
-terraform.tfvars
-.terraform.lock.hcl
-crash.log
-
-# === Git / GitHub ===
-!.gitignore
-!.github/
-
-# === SSL / Secrets ===
-*.pem
-*.key
-*.crt
-
-# === Nginx / Conf backups ===
-*.conf~
-default.conf~
-
-# === Deployment scripts output or cache ===
-*.out
-*.backup
-*.old
-
-# === Custom: Ignore Terraform providers ===
-Terraform/.terraform/
-
-# === Optional: Exclude specific Terraform folders if not in use ===
-Terraform/fake-ssl/
-Terraform/ansible/
 
 ansible/inventory.ini
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+crash.log
+
+# === Nginx ===
+default.conf
+
