@@ -1,16 +1,15 @@
-FROM nginx:latest
+FROM nginx:alpine
 
-# Set environment variable
-ENV DOMAIN_NAME bhagyashrideshmukh.cloud
+# Clean default html
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy the website files
-COPY harshal /usr/share/nginx/html
+# ✅ Copy contents of harshal folder directly into html root
+COPY harshal/ /usr/share/nginx/html/
 
-# Copy the nginx configuration file
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Use your custom config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
+EXPOSE 443
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
