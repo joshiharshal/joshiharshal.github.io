@@ -1596,3 +1596,132 @@ img {
 .button__icon {
   margin-left: 0.5rem;
 }
+
+/* Add this to your CSS file */
+/* Card container */
+/* Correct grid container for your cards */
+.works-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    align-items: start;
+    max-width: 1000px;
+    margin: 2rem auto 0 auto;
+    width: 100%;
+}
+
+/* Card style */
+.work-card {
+    background: #fcfcfc;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    width: 300px;
+    min-width: 300px;
+    height: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* <-- This puts buttons at the bottom */
+    overflow: hidden;
+    margin: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.work-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgb(255, 255, 255);
+}
+
+.work-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 24px 24px 0 0;
+    background: #f3f4f4;
+    display: block;
+}
+
+.work-card__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 16px 0; /* Only bottom margin */
+}
+
+
+.services__content {
+    background: #000000;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgb(252, 252, 252);
+    padding: 2rem 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.services__content:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgb(0, 0, 0);
+}
+
+.tech-stack__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rem;
+  margin-top: 10rem;
+  justify-content: center;
+}
+
+.tech-card {
+  background: rgb(255, 255, 255);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+  box-shadow: 0 4px 24px rgb(255, 255, 255);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tech-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 8px 32px#eeebeb
+}
+
+.tech-card__icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #000000;
+  opacity: 0.85;
+}
+
+.tech-card__name {
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+
+.about__container {
+    display: flex;
+    flex-direction: column; /* stack vertically */
+    align-items: center;    /* center horizontally */
+    text-align: center;     /* center the text */
+}
+
+.about__data {
+    max-width: 700px; /* keeps text from stretching too wide */
+}
+
+.about__buttons {
+    display: flex;
+    gap: 23rem; /* space between buttons */
+    flex-wrap: wrap; /* so they wrap on small screens */
+}
+
+
