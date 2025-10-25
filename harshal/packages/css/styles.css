@@ -1724,4 +1724,13 @@ img {
     flex-wrap: wrap; /* so they wrap on small screens */
 }
 
+.home__img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.home__blob {
+  width: 260px;
+  height: auto;
+}

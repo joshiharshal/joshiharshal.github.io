@@ -24,7 +24,7 @@ resource "aws_instance" "app_server" {
   ami           = "ami-0f918f7e67a3323f0"
   instance_type = "t2.large"
   vpc_security_group_ids = [aws_security_group.TF_SG.id]
-  key_name = "my-portfolio"
+  key_name = "harshal-portfolio"
 
   root_block_device {
     volume_type = "gp3"
@@ -39,7 +39,7 @@ resource "aws_instance" "app_server" {
 resource "aws_security_group" "TF_SG" {
   name        = "new-1-security-group-ec2"
   description = "Allow web and SSH access"
-  vpc_id      = "vpc-06472eb98932e554e"
+  vpc_id      = "vpc-03ea81600f5e44bb6"
 
   ingress {
     description = "HTTPS"
@@ -86,7 +86,7 @@ resource "aws_security_group" "TF_SG" {
 
 resource "cloudflare_record" "root_domain" {
   zone_id = var.cloudflare_zone_id
-  name    = "portfolio"
+  name    = "@"
   value   = aws_instance.app_server.public_ip
   type    = "A"
   ttl     = 1
@@ -97,7 +97,7 @@ resource "local_file" "inventory" {
   filename = "/home/harshal/Tasks/joshiharshal.github.io/ansible/inventory.ini"
   content  = <<-EOT
     [server]
-    ${aws_instance.app_server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/harshal/Tasks/joshiharshal.github.io/my-portfolio.pem
+    ${aws_instance.app_server.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/harshal/Tasks/joshiharshal.github.io/harshal-portfolio.pem
   EOT
 }
 
@@ -106,5 +106,5 @@ output "instance_public_ip" {
 }  
 
 output "portfolio_url" {
-  value = "https://portfolio.joshiharshal.cloud"
+  value = "https://joshiharshal.cloud"
 }

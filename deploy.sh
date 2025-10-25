@@ -2,9 +2,9 @@
 
 set -e
 
-DOMAIN="portfolio.joshiharshal.cloud"
+DOMAIN="joshiharshal.cloud"
 EMAIL="harshaljoshi9922@gmail.com"
-KEY_PATH="/home/harshal/Tasks/joshiharshal.github.io/my-portfolio.pem"
+KEY_PATH="/home/harshal/Tasks/joshiharshal.github.io/harshal-portfolio.pem"
 
 echo "🚀 Step 1: Provisioning EC2 with Terraform..."
 cd Terraform
@@ -45,10 +45,10 @@ ssh -o StrictHostKeyChecking=no -i $KEY_PATH ubuntu@$INSTANCE_IP <<EOF
     certbot/certbot certonly --standalone \
       --non-interactive --agree-tos \
       -m harshaljoshi9922@gmail.com \
-      -d portfolio.joshiharshal.cloud
+      -d joshiharshal.cloud
 
   echo "✅ SSL cert generated:"
-  sudo ls -l /etc/letsencrypt/live/portfolio.joshiharshal.cloud/
+  sudo ls -l /etc/letsencrypt/live/joshiharshal.cloud/
 
   echo "🚀 Starting portfolio container"
   sudo docker run -d --name myportfolio \

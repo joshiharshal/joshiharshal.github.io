@@ -39,7 +39,7 @@ This project automates the deployment of a **personal portfolio website** on an 
 ├── docker-compose.yml
 ├── nginx.conf
 ├── default.conf
-├── my-portfolio.pem
+├── harshal-portfolio.pem
 └── README.md
 ```
 
@@ -85,11 +85,11 @@ Ensure the following are installed locally:
 - Ansible
 - Docker
 - AWS CLI (configured with your AWS credentials)
-- An SSH key (`my-portfolio.pem`) with access to the EC2 instance
+- An SSH key (`harshal-portfolio.pem`) with access to the EC2 instance
 
 ### 3. Configure Your Domain
 
-- Set up a subdomain (e.g., `portfolio.joshiharshal.cloud`) in your DNS provider (e.g., Cloudflare).
+- Set up a subdomain (e.g., `joshiharshal.cloud`) in your DNS provider (e.g., Cloudflare).
 - Create an A-record pointing to the EC2 instance's public IP address.
 
 ### 4. Run the Deployment Script
@@ -135,3 +135,35 @@ terraform destroy -auto-approve
 ## 📜 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+in intnace create nginx.conf file
+vim nginx
+server {
+    listen 80;
+    server_name joshiharshal.cloud www.joshiharshal.cloud;
+
+    location /.well-known/acme-challenge/ {
+        root /usr/share/nginx/html;
+    }
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name joshiharshal.cloud www.joshiharshal.cloud;
+
+    ssl_certificate /etc/letsencrypt/live/joshiharshal.cloud/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/joshiharshal.cloud/privkey.pem;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+}
