@@ -1,13 +1,12 @@
 # === SSL / Secrets ===
 harshal-portfolio.pem
-
 # === Docker ===
 .docker/
-
 # === Ansible ===
+
 ansible/inventory.ini
 
-# === Terraform ===
+# Terraform
 .terraform/
 *.tfstate
 *.tfstate.backup
@@ -17,6 +16,3 @@ crash.log
 # === Nginx ===
 default.conf
 
-# === Ignore all images but keep folder ===
-harshal/packages/images/*
-!harshal/packages/images/.gitkeep
