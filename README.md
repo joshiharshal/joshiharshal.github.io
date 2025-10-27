@@ -6,17 +6,11 @@
 ![EC2](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws)
 ![SSL](https://img.shields.io/badge/SSL-Let's%20Encrypt-green?logo=letsencrypt)
 
-This project automates the deployment of a **personal portfolio website** on an **AWS EC2 instance** using a single Bash script. It integrates:
-
-- **Terraform** for infrastructure provisioning  
-- **Ansible** for installing Docker  
-- **Docker** for running the portfolio app  
-- **Certbot (Let's Encrypt)** for SSL certificates  
-- **Cloudflare** for DNS management  
+A small automation project to provision an AWS EC2 instance and deploy a personal portfolio website using Terraform, Ansible, Docker, and Certbot. Cloudflare is used for DNS management.
 
 ---
 
-## 📁 Project Structure
+## Project structure
 
 ```
 .
@@ -45,100 +39,73 @@ This project automates the deployment of a **personal portfolio website** on an 
 
 ---
 
-## ⚙️ Technologies Used
+## Technologies
 
-- **Terraform**: Infrastructure provisioning  
-- **Ansible**: Configuration management for installing Docker  
-- **Docker**: Containerization for running the portfolio application  
-- **Certbot**: Automated SSL certificate generation with Let's Encrypt  
-- **AWS EC2**: Cloud hosting for the portfolio website  
-- **Cloudflare**: DNS management  
-- **Bash**: Automation scripting  
-
----
-
-## 🚀 Features
-
-- Automated provisioning of an AWS EC2 instance using Terraform  
-- SSH readiness check before running Ansible playbooks  
-- Automated Docker installation and container management  
-- SSL certificate generation for HTTPS using Let's Encrypt  
-- Clean separation of infrastructure provisioning, configuration, and deployment  
-- Persistent SSL certificates using Docker volumes  
+- Terraform — infrastructure provisioning  
+- Ansible — configuration management (install Docker)  
+- Docker — containerize the website  
+- Certbot (Let's Encrypt) — TLS certificates  
+- AWS EC2 — hosting  
+- Cloudflare — DNS  
+- Bash — orchestration script
 
 ---
 
-## 🛠️ Setup Instructions
+## Features
 
-### 1. Clone the Repository
+- Single-script deployment: provision EC2, wait for SSH, configure instance, run containers  
+- Automated Docker installation via Ansible  
+- TLS provisioning with Certbot (standalone or nginx mode)  
+- Persistent certificate storage using Docker volumes  
+- Clear separation: infra (Terraform) → config (Ansible) → deploy (Docker)
 
+---
+
+## Prerequisites
+
+- Local: Terraform, Ansible, Docker, AWS CLI (configured), ssh client  
+- An SSH private key with access to the EC2 instance (`harshal-portfolio.pem`)  
+- A registered domain and Cloudflare (or other DNS) account
+
+---
+
+## Configure domain
+
+1. Create A record for your domain/subdomain (e.g., `joshiharshal.cloud`) pointing to the EC2 instance public IP.  
+2. Ensure Cloudflare proxy is disabled (DNS-only) while obtaining certificates with Certbot standalone; you can enable proxy after successful issuance if desired.
+
+---
+
+## Deployment
+
+1. Clone repository:
 ```sh
 git clone https://github.com/joshiharshal/joshiharshal.github.io.git
 cd joshiharshal.github.io
 ```
 
-### 2. Prerequisites
-
-Ensure the following are installed locally:
-
-- Terraform
-- Ansible
-- Docker
-- AWS CLI (configured with your AWS credentials)
-- An SSH key (`harshal-portfolio.pem`) with access to the EC2 instance
-
-### 3. Configure Your Domain
-
-- Set up a subdomain (e.g., `joshiharshal.cloud`) in your DNS provider (e.g., Cloudflare).
-- Create an A-record pointing to the EC2 instance's public IP address.
-
-### 4. Run the Deployment Script
-
+2. Make deploy script executable and run:
 ```sh
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-The script performs the following actions:
+What deploy.sh does (typical flow)
+- Runs `terraform init`/`apply` to create EC2 instance  
+- Waits for SSH to be available on the new instance  
+- Runs Ansible playbook to install Docker and required packages  
+- Pulls and starts the website container (maps ports 80/443)  
+- Runs Certbot to obtain TLS certificates (standalone) and stores them under `/etc/letsencrypt/live/<domain>/`
 
-- Provisions an EC2 instance using Terraform.
-- Waits for SSH to become available.
-- Uses Ansible to install Docker on the EC2 instance.
-- Pulls the portfolio Docker image.
-- Generates SSL certificates using Certbot in standalone mode.
-- Runs the Docker container on ports 80 (HTTP) and 443 (HTTPS).
-
----
-
-## 🧹 Clean Up
-
-To tear down the EC2 instance and associated resources:
-
-```sh
-cd Terraform
-terraform destroy -auto-approve
-```
+If you prefer to provision certificates via nginx, adjust the playbook or use Certbot with `--nginx`.
 
 ---
 
-## 👤 Author
+## Creating nginx configuration on the instance
 
-**Harshal Yogeshwar Joshi**
+To allow Certbot HTTP-01 challenges and serve the site, create an nginx config (example below). On the instance you can create `/etc/nginx/conf.d/portfolio.conf`:
 
-- Email: harshaljoshi9922@gmail.com
-- Website: [joshiharshal.cloud](https://joshiharshal.cloud)
-- [LinkedIn](https://www.linkedin.com/in/harshal-joshi003/)
-- [GitHub](https://github.com/joshiharshal)
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-
-in intnace create nginx.conf file
-vim nginx
+```nginx
 server {
     listen 80;
     server_name joshiharshal.cloud www.joshiharshal.cloud;
@@ -167,3 +134,49 @@ server {
         try_files $uri $uri/ =404;
     }
 }
+```
+
+To write the file via SSH:
+```sh
+sudo tee /etc/nginx/conf.d/portfolio.conf > /dev/null <<'EOF'
+# (paste the nginx config here)
+EOF
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+---
+
+## Renewing certificates
+
+If using Certbot standalone:
+```sh
+sudo certbot renew --pre-hook "systemctl stop nginx" --post-hook "systemctl start nginx"
+```
+Or configure a cron/systemd timer as preferred.
+
+---
+
+## Tear down / Clean up
+
+To destroy AWS resources created by Terraform:
+```sh
+cd Terraform
+terraform destroy -auto-approve
+```
+
+Remember to remove any Cloudflare/DNS records if you no longer need the domain mapping.
+
+---
+
+## Author
+
+Harshal Yogeshwar Joshi  
+- Email: harshaljoshi9922@gmail.com  
+- Website: https://joshiharshal.cloud  or  https://joshiharshal.github.io/
+- GitHub: https://github.com/joshiharshal
+
+---
+
+## License
+
+MIT — see LICENSE file for details.
