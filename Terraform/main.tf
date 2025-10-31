@@ -21,9 +21,9 @@ provider "cloudflare" {
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-0f918f7e67a3323f0"
+  ami           = "ami-02d26659fd82cf299"
   instance_type = "t2.large"
-  vpc_security_group_ids = [aws_security_group.TF_SG.id]
+  vpc_security_group_ids = [aws_security_group.SG.id]
   key_name = "harshal-portfolio"
 
   root_block_device {
@@ -36,10 +36,10 @@ resource "aws_instance" "app_server" {
   }
 }
 
-resource "aws_security_group" "TF_SG" {
-  name        = "new-1-security-group-ec2"
+resource "aws_security_group" "SG" {
+  name        = "new-security-group-ec2"
   description = "Allow web and SSH access"
-  vpc_id      = "vpc-03ea81600f5e44bb6"
+  vpc_id      = "vpc-00e44613fd15c9ec2"
 
   ingress {
     description = "HTTPS"
